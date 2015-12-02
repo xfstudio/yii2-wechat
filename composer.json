@@ -1,0 +1,28 @@
+{
+    "name": "xfstudio/yii2-wechat",
+    "type": "yii2-extension",
+    "description": "The wechat api for the Yii2 framework",
+    "keywords": ["yii2", "wechat", "weixin", "sdk"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/xfstudio/yii2-wechat/issues",
+        "wiki": "https://github.com/xfstudio/yii2-wechat/wiki",
+        "source": "https://github.com/xfstudio/yii2-wechat"
+    },
+    "authors": [
+        {
+            "name": "CallMeZ(Windy)",
+            "email": "xfolstudio@gmail.com",
+            "homepage": "http://xf.sc.cn/",
+            "role": "Updater"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "xfstudio\\wechat\\": ""
+        }
+    }
+}
