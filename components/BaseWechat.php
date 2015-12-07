@@ -53,6 +53,28 @@ abstract class BaseWechat extends \yii\base\Component
      * @var array
      */
     public $lastError;
+    /**
+     * 短息签名
+     *
+     * @var array
+     */
+    public $debug;
+
+    /**
+     * 打印调试信息
+     * @param mixed $data 数据
+     * @return string
+     */
+    public function dump($data) {
+        if ($this->debug){
+            foreach ($data as $key => $value) {
+                var_dump($value);
+            }
+            die();
+        } else {
+            return false;
+        }
+    }
 
     /**
      * 请求微信服务器获取AccessToken

@@ -873,7 +873,7 @@ class QyWechat extends BaseWechat
             'corpid' => $this->corpId,
             'corpsecret' => $this->corpSecret
         ]);
-        return isset($result['access_token']) ? $result : false;
+        return isset($result['access_token']) ? $result : $this->dump($result);
     }
 
     /**
@@ -889,7 +889,7 @@ class QyWechat extends BaseWechat
         $info['auth_corpid']=$user['th_corpid'];
         $info['permanent_code']=$user['permanent_code'];
         $result = $this->httpGet(self::WECHAT_ACCESS_TOKEN_GET_PREFIX, $info);
-        return isset($result['access_token']) ? $result : false;
+        return isset($result['access_token']) ? $result : $this->dump($result);
     }
 
     /**
@@ -904,7 +904,7 @@ class QyWechat extends BaseWechat
         $info['suite_secret']=$data['su_secret'];
         $info['suite_ticket']=$data['suiteticket'];
         $result = $this->httpGet(self::WECHAT_ACCESS_TOKEN_SUITE_PREFIX, $info);
-        return isset($result['suite_access_token']) ? $result : false;
+        return isset($result['suite_access_token']) ? $result : $this->dump($result);
     }
 
     /**
@@ -921,7 +921,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpGet(self::WECHAT_IP_PREFIX, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['ip_list']) ? $result['ip_list'] : false;
+        return isset($result['ip_list']) ? $result['ip_list'] : $this->dump($result);
     }
 
     /* =================== 管理通讯录 =================== */
@@ -1010,7 +1010,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_DEPARTMENT_CREATE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && !$result['errcode'] ? $result['id'] : false;
+        return isset($result['errcode']) && !$result['errcode'] ? $result['id'] : $this->dump($result);
     }
 
     /**
@@ -1067,8 +1067,8 @@ class QyWechat extends BaseWechat
         ] + ($id === null ? [] : [
             'id' => $id
         ]));
-        // var_dump($result);die();
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['department'] : false;
+        // $this->dump($result);die();
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['department'] : $this->dump($result);
     }
 
     /**
@@ -1162,7 +1162,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'userid' => $userId
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : $this->dump($result);
     }
 
     /**
@@ -1185,7 +1185,7 @@ class QyWechat extends BaseWechat
             'fetch_child' => $fetchChild,
             'status' => $status,
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['userlist'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['userlist'] : $this->dump($result);
     }
 
     /**
@@ -1208,7 +1208,7 @@ class QyWechat extends BaseWechat
             'fetch_child' => $fetchChild,
             'status' => $status,
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['userlist'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['userlist'] : $this->dump($result);
     }
 
     /**
@@ -1228,7 +1228,7 @@ class QyWechat extends BaseWechat
         ], [
             'access_token' => $this->getAccessToken(),
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['type'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['type'] : $this->dump($result);
     }
 
     /**
@@ -1248,7 +1248,7 @@ class QyWechat extends BaseWechat
         ], [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['tagid'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['tagid'] : $this->dump($result);
     }
 
     /**
@@ -1308,7 +1308,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'tagid' => $tagId
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : $this->dump($result);
     }
 
     /**
@@ -1361,7 +1361,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpGet(self::WECHAT_TAG_LIST_GET_PREFIX, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['taglist'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['taglist'] : $this->dump($result);
     }
 
     /**
@@ -1379,7 +1379,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_TAG_USERS_DELETE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : $this->dump($result);
     }
 
     /**
@@ -1397,7 +1397,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_USER_BATCH_SYNC_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : $this->dump($result);
     }
 
     /**
@@ -1415,7 +1415,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_USER_BATCH_REPLACE_PREFIX, $data, [
             'access_token' => $this->getAccessToken(),
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : $this->dump($result);
     }
 
     /**
@@ -1433,7 +1433,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_PARTY_BATCH_REPLACE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['jobid'] : $this->dump($result);
     }
 
     /**
@@ -1452,7 +1452,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'jobid' => $jobId
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : $this->dump($result);
     }
 
     /* =================== 管理多媒体文件 =================== */
@@ -1476,7 +1476,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'type' => $type
         ]);
-        return isset($result['media_id']) ? $result : false;
+        return isset($result['media_id']) ? $result : $this->dump($result);
     }
 
     /**
@@ -1495,7 +1495,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'media_id' => $mediaId
         ]);
-        return !isset($result['errcode']) ? $result : false;
+        return !isset($result['errcode']) ? $result : $this->dump($result);
     }
 
     /* =================== 管理企业号应用 =================== */
@@ -1516,7 +1516,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'agent_id' => $agentId
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : $this->dump($result);
     }
 
     /**
@@ -1551,7 +1551,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpGet(self::WECHAT_AGENT_SET_PREFIX, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['agentlist'] : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['agentlist'] : $this->dump($result);
     }
 
     /* =================== 发送消息 =================== */
@@ -1568,10 +1568,10 @@ class QyWechat extends BaseWechat
      */
     public function sendMessage(array $data)
     {
-        $result = $this->httpRaw(self::WECHAT_CUSTOM_MESSAGE_SEND_PREFIX, $data, [
+        $result = $this->httpRaw(self::WECHAT_MESSAGE_SEND_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : false;
+        return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result : $this->dump([self::WECHAT_BASE_URL . self::WECHAT_MESSAGE_SEND_PREFIX, $this->getAccessToken(), $data, $result]);
     }
 
     /* =================== 自定义菜单 =================== */
@@ -1681,7 +1681,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'agentid' => $agentId
         ]);
-        return isset($result['menu']['button']) ? $result['menu']['button'] : false;
+        return isset($result['menu']['button']) ? $result['menu']['button'] : $this->dump($result);
     }
 
     /* =================== OAuth2验证接口 =================== */
@@ -1728,7 +1728,7 @@ class QyWechat extends BaseWechat
             'code' => $code,
             'agentid' => $agentId
         ]);
-        return !isset($result['errcode']) ? $result : false;
+        return !isset($result['errcode']) ? $result : $this->dump($result);
     }
 
     /* =================== 微信JS接口 =================== */
@@ -1869,7 +1869,7 @@ class QyWechat extends BaseWechat
             'corpid' => $corpid,
             'provider_secret' => $corpsecret
         ]);
-        return !isset($result['provider_access_token']) ? $result['provider_access_token'] : false;
+        return !isset($result['provider_access_token']) ? $result['provider_access_token'] : $this->dump($result);
     }
 
     /**
@@ -1888,7 +1888,7 @@ class QyWechat extends BaseWechat
             'userid' => $userid,
             'agentid' => $agentid
         ]);
-        return ($result['errcode']==0) ? $result['openid'] : false;
+        return ($result['errcode']==0) ? $result['openid'] : $this->dump($result);
     }
 
 }
