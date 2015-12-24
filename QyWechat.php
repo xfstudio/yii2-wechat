@@ -31,6 +31,7 @@ class QyWechat extends BaseWechat
      * @var string
      */
     public $corpSecret;
+    public $app;
     /**
      * 公众号接口验证token,可由您来设定. 并填写在微信公众平台->开发者中心
      * @var string
@@ -61,13 +62,14 @@ class QyWechat extends BaseWechat
      * @inheritdoc
      * @throws InvalidConfigException
      */
-    public function setParameter($options)
+    public function setParameter($options, $app='SYSTEM')
     {
-        $this->token = isset($options['token'])?$options['token']:'';
-        $this->encodingAesKey = isset($options['encodingAesKey'])?$options['encodingAesKey']:'';
         $this->corpId = isset($options['corpId'])?$options['corpId']:'';
-        $this->corpSecret = isset($options['corpSecret'])?$options['corpSecret']:'';
-        $this->agentid = isset($options['agentid'])?$options['agentid']:'';
+        $this->corpSecret = isset($options['apps'][$app]['secret'])?$options['apps'][$app]['secret']:$options['corpSecret'];
+        $this->app = $app;
+        $this->token = isset($options['apps'][$app]['token'])?$options['apps'][$app]['token']:$options['token'];
+        $this->encodingAesKey = isset($options['apps'][$app]['encodingAesKey'])?$options['apps'][$app]['encodingAesKey']:$options['encodingAesKey'];
+        $this->agentid = isset($options['apps'][$app]['agentid'])?$options['apps'][$app]['agentid']:'';
         $this->debug = isset($options['debug'])?$options['debug']:false;
         $this->_logcallback = isset($options['logcallback'])?$options['logcallback']:false;
 
@@ -1721,13 +1723,14 @@ class QyWechat extends BaseWechat
      * @return bool|mixed
      * @throws \yii\web\HttpException
      */
-    public function getUserInfo($agentId, $code)
+    public function getUserInfo($code, $agentId = '')
     {
-        $result = $this->httpGet(self::WECHAT_USER_IFNO_GET_PREFIX, [
+        $params = [
             'access_token' => $this->getAccessToken(),
             'code' => $code,
-            'agentid' => $agentId
-        ]);
+        ];
+        if (!empty($agentId)) $params['agentid'] = $agentId;
+        $result = $this->httpGet(self::WECHAT_USER_IFNO_GET_PREFIX, $params);
         return !isset($result['errcode']) ? $result : $this->dump($result);
     }
 

@@ -67,9 +67,13 @@ abstract class BaseWechat extends \yii\base\Component
      */
     public function dump($data) {
         if ($this->debug){
+            echo '<pre>';
             foreach ($data as $key => $value) {
-                var_dump($value);
+                print_r($value);
             }
+            print_r(get_called_class());
+            // print_r(debug_backtrace());
+            echo '</pre>';
             die();
         } else {
             return false;
@@ -97,15 +101,18 @@ abstract class BaseWechat extends \yii\base\Component
     public function getAccessToken($force = false)
     {
         $time = time(); // 为了更精确控制.取当前时间计算
+        $cache_name = 'wechat_access_token_' . $this->corpId . '_' . $this->app;
         if ($this->_accessToken === null || $this->_accessToken['expire'] < $time || $force) {
-            $result = $this->_accessToken === null && !$force ? $this->getCache('access_token', false) : false;
+            $result = $this->_accessToken === null && !$force ? $this->getCache($cache_name, false) : false;
             if ($result === false) {
                 if (!($result = $this->requestAccessToken())) {
                     throw new HttpException(500, 'Fail to get access_token from wechat server.');
                 }
+                // $result['cache_name'] = $cache_name;
+                // $result['secret'] = $this->corpSecret;
                 $result['expire'] = $time + $result['expires_in'];
                 $this->trigger(self::EVENT_AFTER_ACCESS_TOKEN_UPDATE, new Event(['data' => $result]));
-                $this->setCache('access_token', $result, $result['expires_in']);
+                $this->setCache($cache_name, $result, $result['expires_in']);
             }
             $this->setAccessToken($result);
         }
@@ -153,15 +160,16 @@ abstract class BaseWechat extends \yii\base\Component
     public function getJsApiTicket($force = false)
     {
         $time = time(); // 为了更精确控制.取当前时间计算
+        $cache_name = 'wechat_jsapi_ticket_' . $this->corpId . '_' . $this->app;
         if ($this->_jsApiTicket === null || $this->_jsApiTicket['expire'] < $time || $force) {
-            $result = $this->_jsApiTicket === null && !$force ? $this->getCache('js_api_ticket', false) : false;
+            $result = $this->_jsApiTicket === null && !$force ? $this->getCache($cache_name, false) : false;
             if ($result === false) {
                 if (!($result = $this->requestJsApiTicket())) {
                     throw new HttpException(500, 'Fail to get jsapi_ticket from wechat server.');
                 }
                 $result['expire'] = $time + $result['expires_in'];
                 $this->trigger(self::EVENT_AFTER_JS_API_TICKET_UPDATE, new Event(['data' => $result]));
-                $this->setCache('js_api_ticket', $result, $result['expires_in']);
+                $this->setCache($cache_name, $result, $result['expires_in']);
             }
             $this->setJsApiTicket($result);
         }
