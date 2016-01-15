@@ -1030,7 +1030,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_DEPARTMENT_CREATE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1049,7 +1049,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'id' => $id
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1088,11 +1088,11 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_USER_CREATE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
-     * 创建成员
+     * 更新成员
      */
     const WECHAT_USER_UPDATE_PREFIX = '/cgi-bin/user/update';
     /**
@@ -1106,7 +1106,7 @@ class QyWechat extends BaseWechat
         $result = $this->httpRaw(self::WECHAT_USER_UPDATE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1125,7 +1125,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'userid' => $userId
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1145,7 +1145,7 @@ class QyWechat extends BaseWechat
         ], [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1272,7 +1272,7 @@ class QyWechat extends BaseWechat
         ], [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1291,7 +1291,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'tagid' => $tagId
         ]);
-        return isset($result['errcode']) && !$result['errcode'];
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1816,6 +1816,7 @@ class QyWechat extends BaseWechat
     }
 
     protected function getCacheKey($name) {
+        return $name;
     }
 
     public function parseHttpRequest(callable $callable, $url, $postOptions = null) {

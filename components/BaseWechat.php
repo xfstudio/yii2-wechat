@@ -65,20 +65,27 @@ abstract class BaseWechat extends \yii\base\Component
      * @param mixed $data 数据
      * @return string
      */
-    public function dump($data) {
+    public function dump($data)
+    {
         if ($this->debug){
-            echo '<pre>';
+            $errorlog = $_SERVER['DOCUMENT_ROOT'] . '/wechat_api_error_' . date('Ym') . '.log';
+            $this->_write_log($errorlog, date('Y-m-d H:i:s'));
             foreach ($data as $key => $value) {
-                print_r($value);
+                $this->_write_log($errorlog, '\r\n');
+                $this->_write_log($errorlog, print_r($value,true));
             }
-            print_r(get_called_class());
-            // print_r(debug_backtrace());
-            echo '</pre>';
             die();
         } else {
             return false;
         }
     }
+
+    protected function _write_log($filename, $content, $logtype = FILE_APPEND)
+    {
+        echo($content);
+        file_put_contents($filename, $content, $logtype);
+    }
+
 
     /**
      * 请求微信服务器获取AccessToken
