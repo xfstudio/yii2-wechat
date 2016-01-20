@@ -68,11 +68,10 @@ abstract class BaseWechat extends \yii\base\Component
     public function dump($data)
     {
         if ($this->debug){
-            $errorlog = $_SERVER['DOCUMENT_ROOT'] . '/wechat_api_error_' . date('Ym') . '.log';
-            $this->_write_log($errorlog, date('Y-m-d H:i:s'));
+            $errorlog = \Yii::getAlias('@runtime/logs/') . Date('Y-m') . '_wechat_api' . '.log';
+            $this->_write_log($errorlog, date('Y-m-d H:i:s') . ' ');
             foreach ($data as $key => $value) {
-                $this->_write_log($errorlog, '\r\n');
-                $this->_write_log($errorlog, print_r($value,true));
+                $this->_write_log($errorlog, print_r($value,true) . PHP_EOL);
             }
             die();
         } else {

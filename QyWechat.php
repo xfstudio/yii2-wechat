@@ -1027,7 +1027,7 @@ class QyWechat extends BaseWechat
      */
     public function updateDepartment(array $data)
     {
-        $result = $this->httpRaw(self::WECHAT_DEPARTMENT_CREATE_PREFIX, $data, [
+        $result = $this->httpRaw(self::WECHAT_DEPARTMENT_UPDATE_PREFIX, $data, [
             'access_token' => $this->getAccessToken()
         ]);
         return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
@@ -1049,7 +1049,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'id' => $id
         ]);
-        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1125,7 +1125,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'userid' => $userId
         ]);
-        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1145,7 +1145,7 @@ class QyWechat extends BaseWechat
         ], [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1272,7 +1272,7 @@ class QyWechat extends BaseWechat
         ], [
             'access_token' => $this->getAccessToken()
         ]);
-        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1291,7 +1291,7 @@ class QyWechat extends BaseWechat
             'access_token' => $this->getAccessToken(),
             'tagid' => $tagId
         ]);
-        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$data,$result,$this->getAccessToken()]) : !$result['errcode']);
+        return isset($result['errcode']) && ($result['errcode'] ? $this->dump([$result,$this->getAccessToken()]) : !$result['errcode']);
     }
 
     /**
@@ -1830,6 +1830,7 @@ class QyWechat extends BaseWechat
             ], __METHOD__);
             switch ($result ['errcode']) {
                 case 40001: //access_token 失效,强制更新access_token, 并更新地址重新执行请求
+                    $force=false;
                     if ($force) {
                         $url = preg_replace_callback("/access_token=([^&]*)/i", function(){
                             return 'access_token=' . $this->getAccessToken(true);
